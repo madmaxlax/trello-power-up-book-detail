@@ -1,31 +1,59 @@
 <html>
-  <head>
-    <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css">
-    <link rel="stylesheet" href="./css/card-back-section.css">
-    <script src="https://p.trellocdn.com/power-up.min.js"></script>
-  </head>
-  <body>
-    <div id="content">
-      <p>
-        This is the <b>#content</b> <code>&#60;div&#62;</code> and it is outlined in <span style="color: red">red</span>. The <code>&#60;body&#62;</code> is outlined in <span style="color: blue">blue</span>.
-      </p>
-      <p>There are three types of parameters you can pass to <i>.sizeTo()</i>:</p>
-      <p>
-        <b>DOM element</b>: A DOM element that will be measured and we will use the height of. E.g.: <code>t.sizeTo(document.body);</code>
-      </p>
-      <p>
-        <b>DOM query selector</b>: A DOM query selector that will select the node to measure and use the height of. E.g.: <code>t.sizeTo("#btn-content");</code>
-      </p>
-      <p>
-        <b>Positive Number</b>: A positive number that will be used directly for the height. E.g.: <code>t.sizeTo(500);</code>
-      </p>
-      <div style="width: 100%; text-align: center">
-        <button class="mod-primary" id="document">sizeTo() document.body</button>
-        <button class="mod-primary" id="btn-content" >sizeTo() #content</button>
-        <button class="mod-primary" id="five-hundred">sizeTo() 500px</button>
-      </div>
-    </div>
-    This is the <b>body</b>.
-    <script src="./js/card-back-section.js"></script>
-  </body>
+
+<head>
+  <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://p.trellocdn.com/power-up.min.js"></script>
+</head>
+
+<body>
+  <div id="content"></div>
+  <script>
+    $(document).ready(function () {
+      var t = TrelloPowerUp.iframe();
+
+      t.get('card', 'shared', 'bookData').then(function (bookData) {
+        try {
+          bookData = JSON.parse(bookData);
+        } catch (e) {
+          bookData = null;
+        }
+        if (!bookData) {
+          $('#content').html('<p>No book selected.</p>');
+          return;
+        }
+        $('#content').html(`
+            <div class="u-clearfix">
+            <div class="u-gutter">
+              <img src="${bookData.cover}" 
+                  alt="Book Cover" 
+                  class="u-left" 
+                  style="max-width:120px; border-radius:3px; margin-right:12px;">
+              
+              <div class="u-left" style="width: calc(100% - 132px);">
+                <h3 class="u-text-large u-margin-bottom-sm">${bookData.title}</h3>
+                <p class="u-text-small u-quiet u-margin-bottom">by ${bookData.author}</p>
+                
+                <div class="u-text-body u-margin-top">
+                  ${bookData.summary}
+                </div>
+              </div>
+            </div>
+          </div>
+          `);
+      });
+
+      // Initialize the Power-Up client library and include your app name and API key
+      var t = window.TrelloPowerUp.iframe({
+        appKey: '61b0986b776e15ca2491117b098a531c',
+        appName: 'Book details'
+      });
+
+
+
+
+    });
+  </script>
+</body>
+
 </html>

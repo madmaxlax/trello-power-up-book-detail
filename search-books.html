@@ -5,12 +5,26 @@
   <meta charset="utf-8">
   <title>Search Books</title>
   <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css">
+  <style>
+    .book-result {
+      border-radius: 3px;
+      cursor: pointer;
+      padding: 6px 8px;
+      margin-bottom: 4px;
+    }
+
+    .book-result:hover {
+      background-color: var(--ds-background-neutral, #e2e4e6);
+    }
+  </style>
 </head>
 
 <body>
 
-  <input type="text" id="search-input" placeholder="Search for books...">
-  <ul id="results"></ul>
+  <div class="u-clearfix">
+    <input type="text" id="search-input" class="full" placeholder="Search for books...">
+    <ul id="results" class="u-overflow-auto"></ul>
+  </div>
 
   <!-- 
       We're going to use client.js to help us make requests to Trello's API.
@@ -28,11 +42,35 @@
 
   <script>
     $(document).ready(function () {
+
+      // Initialize the Power-Up client library and include your app name and API key
+      var t = window.TrelloPowerUp.iframe({
+        appKey: '61b0986b776e15ca2491117b098a531c',
+        appName: 'Book details'
+      });
+
+      /* 
+        This script listens for input events on the element with the ID 'search-input'.
+        When the input value changes, it checks if the length of the input value (query) is greater than 2 characters.
+        If the query length is greater than 2, it makes an AJAX GET request to the Open Library API to search for books matching the query.
+        The response data is processed to extract book titles and author names, which are then formatted as a list of HTML <li> elements.
+        The formatted list is inserted into the element with the ID 'results'.
+        If the query length is 2 characters or less, the 'results' element is cleared.
+      */
       $('#search-input').on('input', function () {
         const query = $(this).val();
         if (query.length > 2) {
           $.getJSON(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}`, function (data) {
-            const results = data.docs.map(doc => `<li>${doc.title} by ${doc.author_name ? doc.author_name.join(', ') : 'Unknown'}</li>`).join('');
+            const results = data.docs.map(doc => {
+              const bookData = {
+                id: doc.key,
+                title: doc.title,
+                author: doc.author_name ? doc.author_name.join(', ') : 'Unknown',
+                cover: doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg` : '',
+                summary: doc.description ? (typeof doc.description === 'string' ? doc.description : doc.description.value) : 'No description available.'
+              };
+              return `<button class='book-button' data-book='${JSON.stringify(bookData)}'>${doc.title} by ${bookData.author}</button>`;
+            }).join('');
             $('#results').html(results);
           });
         } else {
@@ -40,12 +78,19 @@
         }
       });
 
-
-      // Initialize the Power-Up client library and include your app name and API key
-      var t = window.TrelloPowerUp.iframe({
-        appKey: '61b0986b776e15ca2491117b098a531c',
-        appName: 'Book details'
+      /* 
+        This script listens for click events on elements with the class 'book-result'.
+        When a 'book-result' element is clicked, it retrieves the 'id' data attribute of the clicked element.
+        The 'id' attribute is then stored in the shared state of the Power-Up using the 'set' method.
+        Finally, the popup is closed.
+      */
+      $(document).on('click', '.book-button', function () {
+        var bookData = $(this).attr('data-book');
+        t.set('card', 'shared', 'bookData', bookData)
+          .then(() => t.closePopup());
       });
+
+
 
     });
   </script>
