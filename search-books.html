@@ -108,9 +108,11 @@
       $(document).on('click', '.book-button', function () {
         const bookId = $(this).data('book-id');
         const bookData = bookDataStore[bookId];
+        // remove previous attachments that start with http://books.google.com/books
+        // ... doesn't seem to have this functionality. would have to use the rest api
+        // add new attachments
         t.attach({ url: bookData.infoLink, name: bookData.title + ' -- by: ' + bookData.author });
         t.attach({ url: bookData.cover, name: bookData.title + ' -- cover', setCover: true })
-
         t.set('card', 'shared', 'bookData', JSON.stringify(bookData))
           .then(() => t.closePopup());
       });

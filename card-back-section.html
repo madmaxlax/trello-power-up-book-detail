@@ -52,7 +52,7 @@
           try {
             bookData = JSON.parse(bookData);
           } catch (e) {
-            console.error('Failed to parse bookData:', e);
+            //console.error('Failed to parse bookData:', e);
             bookData = null;
           }
           console.log({ bookData });
@@ -95,7 +95,7 @@
             <div class="u-clearfix u-margin-top">
               <button class="mod-danger u-float-right clear-button">
                 <span class="icon-sm icon-close"></span>
-                Clear
+                Remove book
               </button>
               <button class="mod-secondary u-float-right refresh-button">
                 <span class="icon-sm icon-refresh"></span>
@@ -103,6 +103,7 @@
               </button>
             </div>
             `);
+          t.sizeTo('#content')
           // Add click handler for clear button
           $('.clear-button').click(function () {
             t.set('card', 'shared', 'bookData', '')
