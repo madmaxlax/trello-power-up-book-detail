@@ -293,8 +293,34 @@ return t.popup({
 */
 // };
 
+var getBadges = function (t) {
+  return t.get('card', 'shared', 'bookData').then(function (bookData) {
+    try {
+      bookData = JSON.parse(bookData);
+    } catch (e) {
+      console.error('Failed to parse bookData:', e, bookData);
+    }
+    let sectionTitle = '';
+
+    if (!bookData) {
+      return [];
+    }
+    return [{
+      title: 'Book Details: ',
+      text: bookData.title + ' by ' + bookData.author,
+      icon: GRAY_ICON,
+      color: null
+    }];
+  })
+};
 // We need to call initialize to get all of our capability handles set up and registered with Trello
 TrelloPowerUp.initialize({
+  'card-badges': function (t, options) {
+    return getBadges(t);
+  },
+  'card-detail-badges': function (t, options) {
+    return getBadges(t);
+  },
 
   'card-back-section': function (t, options) {
     return t.get('card', 'shared', 'bookData').then(function (bookData) {
