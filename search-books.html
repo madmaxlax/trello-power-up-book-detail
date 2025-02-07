@@ -82,9 +82,14 @@
                 infoLink: volumeInfo.infoLink
               };
               const stringifiedBookData = JSON.stringify(bookData || '');
-              const btoaBookData = btoa(stringifiedBookData || '');
+              try {
+                const btoaBookData = btoa(stringifiedBookData || '');
+              }
+              catch (e) {
+                console.log(e, stringifiedBookData);
+              }
               //console.log({ btoaBookData, stringifiedBookData });
-              return `<button class='book-button' data-book='${btoa(JSON.stringify(bookData))}'>
+              return `<button class='book-button' data-book='${btoaBookData}'>
                 ${bookData.title} by ${bookData.author}
               </button>`;
             }).join('');
