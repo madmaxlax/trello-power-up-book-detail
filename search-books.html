@@ -108,6 +108,7 @@
       $(document).on('click', '.book-button', function () {
         const bookId = $(this).data('book-id');
         const bookData = bookDataStore[bookId];
+        t.attach({ url: bookData.infoLink, name: jsonBookData.title + ' -- by: ' + jsonBookData.author });
 
         t.set('card', 'shared', 'bookData', JSON.stringify(bookData))
           .then(() => t.closePopup());
