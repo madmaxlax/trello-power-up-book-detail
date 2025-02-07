@@ -299,9 +299,9 @@ TrelloPowerUp.initialize({
   'card-back-section': function (t, options) {
     return t.get('card', 'shared', 'bookData').then(function (bookData) {
       try {
-        bookData = JSON.parse(bookData);
+        bookData = JSON.parse(atob(bookData));
       } catch (e) {
-        console.error('Failed to parse bookData:', e);
+        console.error('Failed to parse bookData:', e, bookData);
       }
       let sectionTitle = '';
 
