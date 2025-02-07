@@ -81,6 +81,9 @@
                   'No ISBN available',
                 infoLink: volumeInfo.infoLink
               };
+              const stringifiedBookData = JSON.stringify(bookData);
+              const btoaBookData = btoa(stringifiedBookData);
+              console.log({ btoaBookData, stringifiedBookData });
               return `<button class='book-button' data-book='${btoa(JSON.stringify(bookData))}'>
                 ${bookData.title} by ${bookData.author}
               </button>`;
