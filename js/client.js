@@ -349,17 +349,31 @@ TrelloPowerUp.initialize({
     });
   },
   'card-buttons': function (t, options) {
-    return [
-
-      {
-        icon: GRAY_ICON,
-        text: 'Search for Book',
-        callback: (t) => t.popup({
-          title: 'Search for Book',
-          url: './search-books.html',
-        })
+    return t.get('card', 'shared', 'bookData').then(function (bookData) {
+      try {
+        bookData = JSON.parse(bookData);
+      } catch (e) {
+        // console.error('Failed to parse bookData:', e, bookData);
       }
-    ];
+      let sectionTitle = '';
+
+      if (!bookData) {
+        sectionTitle = 'Search for Book';
+      }
+      else sectionTitle = 'Change Book';
+
+      return [
+
+        {
+          icon: GRAY_ICON,
+          text: 'Search for Book',
+          callback: (t) => t.popup({
+            title: 'Search for Book',
+            url: './search-books.html',
+          })
+        }
+      ];
+    })
   },
 }, {
   appKey: '61b0986b776e15ca2491117b098a531c',
