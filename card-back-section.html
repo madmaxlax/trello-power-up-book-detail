@@ -17,11 +17,17 @@
         appName: 'Book details'
       });
 
+      t.getAll()
+        .then(function (data) {
+          console.log(JSON.stringify(data, null, 2));
+        });
 
       t.get('card', 'shared', 'bookData').then(function (bookData) {
+        console.log({ bookData });
         try {
           bookData = JSON.parse(bookData);
         } catch (e) {
+          console.error('Failed to parse bookData:', e);
           bookData = null;
         }
         console.log({ bookData });
