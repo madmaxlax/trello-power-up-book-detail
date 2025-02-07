@@ -311,7 +311,7 @@ TrelloPowerUp.initialize({
       else sectionTitle = 'Book Attached: ' + bookData.title;
 
       return {
-        title: 'My Card Back Section',
+        title: sectionTitle,
         icon: GRAY_ICON, // Must be a gray icon, colored icons not allowed.
         content: {
           type: 'iframe',
