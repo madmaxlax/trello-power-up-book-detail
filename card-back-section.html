@@ -24,10 +24,12 @@
         } catch (e) {
           bookData = null;
         }
+        console.log({ bookData });
         if (!bookData) {
           $('#content').html('<p>No book selected.</p>');
           return;
         }
+
         $('#content').html(`
             <div class="u-clearfix">
             <div class="u-gutter">
