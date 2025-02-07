@@ -11,7 +11,7 @@
   <style>
     .book-container {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       gap: 16px;
     }
 
@@ -24,7 +24,7 @@
       flex: 1;
     }
 
-    @media (min-width: 576px) {
+    @media (max-width: 600px) {
       .book-container {
         flex-direction: row;
       }
@@ -71,21 +71,37 @@
           }
 
           $('#content').html(`
-          <div class="book-container u-gutter">
-            <img src="${bookData.cover}" 
-                alt="Book Cover" 
-                class="book-cover">
-            
-            <div class="book-content">
-              <h3 class="u-text-large u-margin-bottom-sm">${bookData.title}</h3>
-              <p class="u-text-small u-quiet u-margin-bottom">by ${bookData.author}</p>
+             <div class="book-container u-gutter">
+              <img src="${bookData.cover}" 
+                  alt="Book Cover" 
+                  class="book-cover">
               
-              <div class="u-text-body">
-                ${bookData.summary}
+              <div class="book-content">
+                <h3 class="u-text-large u-margin-bottom-sm">${bookData.title}</h3>
+                <p class="u-text-small u-quiet u-margin-bottom">by ${bookData.author}</p>
+                <a  href="${bookData.infoLink}" 
+                    target="_blank" 
+                    class="u-text-small u-quiet u-margin-bottom">
+                  Link to book on Google ${bookData.isbn}</a>
+                <div class="u-text-body">
+                  ${bookData.summary}
+                </div>
               </div>
             </div>
-          </div>
-        `);
+
+            <div class="u-clearfix u-margin-top">
+              <button class="mod-danger u-float-right clear-button">
+                <span class="icon-sm icon-close"></span>
+                Clear
+              </button>
+            </div>
+            `);
+          // Add click handler for clear button
+          $('.clear-button').click(function () {
+            t.set('card', 'shared', 'bookData', '')
+              .then(loadBookData);
+          });
+
         });
 
       }

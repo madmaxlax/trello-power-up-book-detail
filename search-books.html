@@ -49,7 +49,7 @@
         appName: 'Book details'
       });
       t.card('name').get('name').then(function (fetchedCardName) {
-        $('#search-input').val(fetchedCardName);
+        $('#search-input').val(fetchedCardName).trigger('input');
       });
       /* 
         This script listens for input events on the element with the ID 'search-input'.
@@ -62,16 +62,24 @@
       $('#search-input').on('input', function () {
         const query = $(this).val();
         if (query.length > 2) {
-          $.getJSON(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}`, function (data) {
-            const results = data.docs.map(doc => {
+          $.getJSON(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&key=AIzaSyBnkwx6tm6DCQxC2gSkvI62J0F7Mq0FGzM`, function (data) {
+            const results = data.items.map(item => {
+              const volumeInfo = item.volumeInfo;
               const bookData = {
-                id: doc.key,
-                title: doc.title,
-                author: doc.author_name ? doc.author_name.join(', ') : 'Unknown',
-                cover: doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg` : '',
-                summary: doc.description ? (typeof doc.description === 'string' ? doc.description : doc.description.value) : 'No description available.'
+                id: item.id,
+                title: volumeInfo.title,
+                author: volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Unknown',
+                cover: volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '',
+                summary: volumeInfo.description || 'No description available.',
+                isbn: volumeInfo.industryIdentifiers ?
+                  volumeInfo.industryIdentifiers.find(id => id.type === 'ISBN_13')?.identifier ||
+                  volumeInfo.industryIdentifiers[0]?.identifier :
+                  'No ISBN available',
+                infoLink: volumeInfo.infoLink
               };
-              return `<button class='book-button' data-book='${JSON.stringify(bookData)}'>${doc.title} by ${bookData.author}</button>`;
+              return `<button class='book-button' data-book='${JSON.stringify(bookData)}'>
+                ${bookData.title} by ${bookData.author}
+              </button>`;
             }).join('');
             $('#results').html(results);
           });
@@ -89,6 +97,8 @@
       $(document).on('click', '.book-button', function () {
         var bookData = $(this).attr('data-book');
         console.log('saving book data ', { bookData });
+        jsonBookData = JSON.parse(bookData);
+        t.attach({ url: bookData.infoLink, name: jsonBookData.title + ' -- by: ' + jsonBookData.author });
         t.set('card', 'shared', 'bookData', bookData)
           .then(() => t.closePopup());
       });
