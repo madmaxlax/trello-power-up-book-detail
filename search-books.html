@@ -86,6 +86,7 @@
       */
       $(document).on('click', '.book-button', function () {
         var bookData = $(this).attr('data-book');
+        console.log('saving book data ', { bookData });
         t.set('card', 'shared', 'bookData', bookData)
           .then(() => t.closePopup());
       });
