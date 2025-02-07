@@ -44,6 +44,8 @@
         appName: 'Book details'
       });
 
+      const bookDataArg = t.arg('bookData');
+      console.log(bookDataArg);
 
       function loadBookData() {
         t.get('card', 'shared', 'bookData').then(function (bookData) {
@@ -114,6 +116,18 @@
 
       // Initial load
       loadBookData();
+      const unwatchBookData = t.watch('card', 'shared', 'bookData',
+        function (newValue) {
+          console.log('Book data changed:', newValue);
+          loadBookData();
+        }
+      );
+
+      // Clean up watcher when iframe is removed
+      window.addEventListener('unload', function () {
+        unwatchBookData();
+      });
+
       // Add click handler for refresh button
       $('.refresh-button').click(function () {
         loadBookData();

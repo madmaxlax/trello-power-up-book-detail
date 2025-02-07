@@ -342,7 +342,7 @@ TrelloPowerUp.initialize({
         icon: GRAY_ICON, // Must be a gray icon, colored icons not allowed.
         content: {
           type: 'iframe',
-          url: t.signUrl('./card-back-section.html'),
+          url: t.signUrl('./card-back-section.html', { bookData: bookData }),
           height: 230 // Max height is 500
         }
       };
