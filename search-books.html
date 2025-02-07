@@ -81,9 +81,9 @@
                   'No ISBN available',
                 infoLink: volumeInfo.infoLink
               };
-              const stringifiedBookData = JSON.stringify(bookData);
-              const btoaBookData = btoa(stringifiedBookData);
-              console.log({ btoaBookData, stringifiedBookData });
+              const stringifiedBookData = JSON.stringify(bookData || '');
+              const btoaBookData = btoa(stringifiedBookData || '');
+              //console.log({ btoaBookData, stringifiedBookData });
               return `<button class='book-button' data-book='${btoa(JSON.stringify(bookData))}'>
                 ${bookData.title} by ${bookData.author}
               </button>`;
@@ -106,6 +106,7 @@
         console.log('saving book data ', { bookData });
         jsonBookData = JSON.parse(bookData);
         t.attach({ url: bookData.infoLink, name: jsonBookData.title + ' -- by: ' + jsonBookData.author });
+        t.card('description').set('description', bookData);
         t.set('card', 'shared', 'bookData', bookData)
           .then(() => t.closePopup());
       });
