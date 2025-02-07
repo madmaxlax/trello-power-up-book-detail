@@ -96,6 +96,10 @@
                 <span class="icon-sm icon-close"></span>
                 Clear
               </button>
+              <button class="mod-secondary u-float-right refresh-button">
+                <span class="icon-sm icon-refresh"></span>
+                Refresh
+              </button>
             </div>
             `);
           // Add click handler for clear button
@@ -110,6 +114,10 @@
 
       // Initial load
       loadBookData();
+      // Add click handler for refresh button
+      $('.refresh-button').click(function () {
+        loadBookData();
+      });
 
     });
   </script>
