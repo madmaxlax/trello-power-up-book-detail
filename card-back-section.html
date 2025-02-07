@@ -10,7 +10,13 @@
   <div id="content"></div>
   <script>
     $(document).ready(function () {
-      var t = TrelloPowerUp.iframe();
+
+      // Initialize the Power-Up client library and include your app name and API key
+      var t = window.TrelloPowerUp.iframe({
+        appKey: '61b0986b776e15ca2491117b098a531c',
+        appName: 'Book details'
+      });
+
 
       t.get('card', 'shared', 'bookData').then(function (bookData) {
         try {
@@ -42,14 +48,6 @@
           </div>
           `);
       });
-
-      // Initialize the Power-Up client library and include your app name and API key
-      var t = window.TrelloPowerUp.iframe({
-        appKey: '61b0986b776e15ca2491117b098a531c',
-        appName: 'Book details'
-      });
-
-
 
 
     });
