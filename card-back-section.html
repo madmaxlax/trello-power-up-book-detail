@@ -4,10 +4,35 @@
   <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css">
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
+
 </head>
 
 <body>
-  <div id="content"></div>
+  <style>
+    .book-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .book-cover {
+      max-width: 120px;
+      border-radius: 3px;
+    }
+
+    .book-content {
+      flex: 1;
+    }
+
+    @media (min-width: 576px) {
+      .book-container {
+        flex-direction: row;
+      }
+    }
+  </style>
+  <div id="content">
+    <p>No book selected.</p>
+  </div>
   <script>
     $(document).ready(function () {
 
@@ -17,46 +42,56 @@
         appName: 'Book details'
       });
 
-      t.getAll()
-        .then(function (data) {
-          console.log(JSON.stringify(data, null, 2));
-        });
 
-      t.get('card', 'shared', 'bookData').then(function (bookData) {
-        console.log({ bookData });
-        try {
-          bookData = JSON.parse(bookData);
-        } catch (e) {
-          console.error('Failed to parse bookData:', e);
-          bookData = null;
-        }
-        console.log({ bookData });
-        if (!bookData) {
-          $('#content').html('<p>No book selected.</p>');
-          return;
-        }
-
-        $('#content').html(`
+      function loadBookData() {
+        t.get('card', 'shared', 'bookData').then(function (bookData) {
+          console.log({ bookData });
+          try {
+            bookData = JSON.parse(bookData);
+          } catch (e) {
+            console.error('Failed to parse bookData:', e);
+            bookData = null;
+          }
+          console.log({ bookData });
+          if (!bookData) {
+            $('#content').html(`
             <div class="u-clearfix">
-            <div class="u-gutter">
-              <img src="${bookData.cover}" 
-                  alt="Book Cover" 
-                  class="u-left" 
-                  style="max-width:120px; border-radius:3px; margin-right:12px;">
+              <p class="u-inline-block">No book selected.</p>
+              <button class="mod-secondary u-float-right refresh-button">
+                <span class="icon-sm icon-refresh"></span>
+                Refresh
+              </button>
+            </div>
+          `);
+            // Add click handler for refresh button
+            $('.refresh-button').click(function () {
+              loadBookData();
+            });
+            return;
+          }
+
+          $('#content').html(`
+          <div class="book-container u-gutter">
+            <img src="${bookData.cover}" 
+                alt="Book Cover" 
+                class="book-cover">
+            
+            <div class="book-content">
+              <h3 class="u-text-large u-margin-bottom-sm">${bookData.title}</h3>
+              <p class="u-text-small u-quiet u-margin-bottom">by ${bookData.author}</p>
               
-              <div class="u-left" style="width: calc(100% - 132px);">
-                <h3 class="u-text-large u-margin-bottom-sm">${bookData.title}</h3>
-                <p class="u-text-small u-quiet u-margin-bottom">by ${bookData.author}</p>
-                
-                <div class="u-text-body u-margin-top">
-                  ${bookData.summary}
-                </div>
+              <div class="u-text-body">
+                ${bookData.summary}
               </div>
             </div>
           </div>
-          `);
-      });
+        `);
+        });
 
+      }
+
+      // Initial load
+      loadBookData();
 
     });
   </script>
