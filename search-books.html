@@ -45,6 +45,7 @@
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
 
   <script>
+    let bookDataStore = {};
     $(document).ready(function () {
 
       // Initialize the Power-Up client library and include your app name and API key
@@ -67,6 +68,9 @@
         const query = $(this).val();
         if (query.length > 2) {
           $.getJSON(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&key=AIzaSyBnkwx6tm6DCQxC2gSkvI62J0F7Mq0FGzM`, function (data) {
+            // reset the book data store
+            bookDataStore = {};
+
             const results = data.items.map(item => {
               const volumeInfo = item.volumeInfo;
               const bookData = {
@@ -81,16 +85,10 @@
                   'No ISBN available',
                 infoLink: volumeInfo.infoLink
               };
-              const stringifiedBookData = JSON.stringify(bookData || '');
-              let btoaBookData = '';
-              try {
-                btoaBookData = btoa(stringifiedBookData || '');
-              }
-              catch (e) {
-                console.log(e, stringifiedBookData);
-              }
-              //console.log({ btoaBookData, stringifiedBookData });
-              return `<button class='book-button' data-book='${btoaBookData}'>
+              // Store book data with ID as key
+              bookDataStore[item.id] = bookData;
+
+              return `<button class='book-button' data-book-id="${item.id}">
                 ${bookData.title} by ${bookData.author}
               </button>`;
             }).join('');
@@ -108,12 +106,10 @@
         Finally, the popup is closed.
       */
       $(document).on('click', '.book-button', function () {
-        var bookData = atob($(this).attr('data-book'));
-        console.log('saving book data ', { bookData });
-        jsonBookData = JSON.parse(bookData);
-        t.attach({ url: bookData.infoLink, name: jsonBookData.title + ' -- by: ' + jsonBookData.author });
-        t.card('description').set('description', bookData);
-        t.set('card', 'shared', 'bookData', bookData)
+        const bookId = $(this).data('book-id');
+        const bookData = bookDataStore[bookId];
+
+        t.set('card', 'shared', 'bookData', JSON.stringify(bookData))
           .then(() => t.closePopup());
       });
 

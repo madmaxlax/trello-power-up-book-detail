@@ -299,7 +299,7 @@ TrelloPowerUp.initialize({
   'card-back-section': function (t, options) {
     return t.get('card', 'shared', 'bookData').then(function (bookData) {
       try {
-        bookData = JSON.parse(atob(bookData));
+        bookData = JSON.parse(bookData);
       } catch (e) {
         console.error('Failed to parse bookData:', e, bookData);
       }
