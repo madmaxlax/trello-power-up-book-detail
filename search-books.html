@@ -77,7 +77,7 @@
                   'No ISBN available',
                 infoLink: volumeInfo.infoLink
               };
-              return `<button class='book-button' data-book='${JSON.stringify(bookData)}'>
+              return `<button class='book-button' data-book='${btoa(JSON.stringify(bookData))}'>
                 ${bookData.title} by ${bookData.author}
               </button>`;
             }).join('');
@@ -95,7 +95,7 @@
         Finally, the popup is closed.
       */
       $(document).on('click', '.book-button', function () {
-        var bookData = $(this).attr('data-book');
+        var bookData = atob($(this).attr('data-book'));
         console.log('saving book data ', { bookData });
         jsonBookData = JSON.parse(bookData);
         t.attach({ url: bookData.infoLink, name: jsonBookData.title + ' -- by: ' + jsonBookData.author });
