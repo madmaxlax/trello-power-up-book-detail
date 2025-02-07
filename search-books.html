@@ -109,6 +109,7 @@
         const bookId = $(this).data('book-id');
         const bookData = bookDataStore[bookId];
         t.attach({ url: bookData.infoLink, name: bookData.title + ' -- by: ' + bookData.author });
+        t.attach({ url: bookData.cover, name: bookData.title + ' -- cover', setCover: true })
 
         t.set('card', 'shared', 'bookData', JSON.stringify(bookData))
           .then(() => t.closePopup());

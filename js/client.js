@@ -295,12 +295,13 @@ return t.popup({
 
 var getBadges = function (t) {
   return t.get('card', 'shared', 'bookData').then(function (bookData) {
-    try {
-      bookData = JSON.parse(bookData);
-    } catch (e) {
-      console.error('Failed to parse bookData:', e, bookData);
+    if (bookData) {
+      try {
+        bookData = JSON.parse(bookData);
+      } catch (e) {
+        console.error('Failed to parse bookData:', e, bookData);
+      }
     }
-    let sectionTitle = '';
 
     if (!bookData) {
       return [];
