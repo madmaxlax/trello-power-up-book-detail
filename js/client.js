@@ -77,7 +77,7 @@ t.getAll();
 */
 
 var GLITCH_ICON = 'https://cdn.glitch.com/2442c68d-7b6d-4b69-9d13-feab530aa88e%2Fglitch-icon.svg?1489773457908';
-var GRAY_ICON = 'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-gray.svg';
+var GRAY_ICON = 'https://cdn.glitch.me/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-gray.svg';
 var WHITE_ICON = 'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-white.svg';
 
 // var randomBadgeColor = function () {
@@ -434,50 +434,60 @@ TrelloPowerUp.initialize({
     };
   },
   'card-buttons': function (t, options) {
-    return [{
-      // usually you will provide a callback function to be run on button click
-      // we recommend that you use a popup on click generally
-      icon: GRAY_ICON, // don't use a colored icon here
-      text: 'Add Book',
-      callback: (t) => {
-        // Trello Power-Up Popups are actually pretty powerful
-        // Searching is a pretty common use case, so why reinvent the wheel
-        var items = ['acad', 'arch', 'badl', 'crla', 'grca', 'yell', 'yose'].map(function (parkCode) {
-          var urlForCode = 'http://www.nps.gov/' + parkCode + '/';
-          var nameForCode = '🏞 ' + parkCode.toUpperCase();
-          return {
-            text: nameForCode,
-            url: urlForCode,
-            callback: function (t) {
-              // In this case we want to attach that park to the card as an attachment
-              // but first let's ensure that the user can write on this model
-              if (t.memberCanWriteToModel('card')) {
-                return t.attach({ url: urlForCode, name: nameForCode })
-                  .then(function () {
-                    // once that has completed we should tidy up and close the popup
-                    return t.closePopup();
-                  });
-              } else {
-                console.log("Oh no! You don't have permission to add attachments to this card.")
-                return t.closePopup(); // We're just going to close the popup for now.
-              };
-            }
-          };
-        });
+    return [
+      {
+        // usually you will provide a callback function to be run on button click
+        // we recommend that you use a popup on click generally
+        icon: GRAY_ICON, // don't use a colored icon here
+        text: 'Add Book',
+        callback: (t) => {
+          // Trello Power-Up Popups are actually pretty powerful
+          // Searching is a pretty common use case, so why reinvent the wheel
+          var items = ['acad', 'arch', 'badl', 'crla', 'grca', 'yell', 'yose'].map(function (parkCode) {
+            var urlForCode = 'http://www.nps.gov/' + parkCode + '/';
+            var nameForCode = '🏞 ' + parkCode.toUpperCase();
+            return {
+              text: nameForCode,
+              url: urlForCode,
+              callback: function (t) {
+                // In this case we want to attach that park to the card as an attachment
+                // but first let's ensure that the user can write on this model
+                if (t.memberCanWriteToModel('card')) {
+                  return t.attach({ url: urlForCode, name: nameForCode })
+                    .then(function () {
+                      // once that has completed we should tidy up and close the popup
+                      return t.closePopup();
+                    });
+                } else {
+                  console.log("Oh no! You don't have permission to add attachments to this card.")
+                  return t.closePopup(); // We're just going to close the popup for now.
+                };
+              }
+            };
+          });
 
-        // we could provide a standard iframe popup, but in this case we
-        // will let Trello do the heavy lifting
-        return t.popup({
-          title: 'Popup Search Example',
-          items: items, // Trello will search client-side based on the text property of the items
-          search: {
-            count: 5, // How many items to display at a time
-            placeholder: 'Search National Parks',
-            empty: 'No parks found'
-          }
-        });
+          // we could provide a standard iframe popup, but in this case we
+          // will let Trello do the heavy lifting
+          return t.popup({
+            title: 'Popup Search Example',
+            items: items, // Trello will search client-side based on the text property of the items
+            search: {
+              count: 5, // How many items to display at a time
+              placeholder: 'Search National Parks',
+              empty: 'No parks found'
+            }
+          });
+        }
+      },
+      {
+        icon: GRAY_ICON,
+        text: 'Search for Book',
+        callback: (t) => t.popup({
+          title: 'Search for Book',
+          url: './search-books.html',
+        })
       }
-    }];
+    ];
     // , {
     //   // but of course, you could also just kick off to a url if that's your thing
     //   icon: GRAY_ICON,

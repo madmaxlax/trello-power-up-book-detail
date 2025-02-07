@@ -40,52 +40,13 @@
         }
       });
 
-      $("code").hide();
 
       // Initialize the Power-Up client library and include your app name and API key
       var t = window.TrelloPowerUp.iframe({
-        appKey: 'your_key_here',
-        appName: 'My Trello App'
+        appKey: '61b0986b776e15ca2491117b098a531c',
+        appName: 'Book details'
       });
 
-      let success = (response) => {
-        $("code").html(JSON.stringify(response, null, 2));
-        $("code").show();
-      }
-
-      let error = (error) => {
-        alert(JSON.stringify(error, null, 2));
-      }
-
-      let makeRequest = (token) => {
-        window.Trello.setToken(token);
-        try {
-          window.Trello.members.get('me', success, error)
-        } catch (err) {
-          console.log(err)
-        }
-      }
-
-      t.getRestApi()
-        .getToken()
-        .then((token) => {
-          console.log('We\'ve received a token!')
-          if (!token) {
-            console.log('But it doesn\'t exist');
-            document.querySelector('button').addEventListener('click', function () {
-              t.getRestApi()
-                .authorize({ scope: 'read', expiration: '1hour' })
-                .then(function () {
-                  t.closePopup();
-                  alert('Successfully authorized')
-                });
-            });
-          } else {
-            console.log('So we should make a request with it.');
-            $("button").hide();
-            makeRequest(token);
-          }
-        });
     });
   </script>
 </body>
