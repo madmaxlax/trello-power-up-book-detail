@@ -82,8 +82,9 @@
                 infoLink: volumeInfo.infoLink
               };
               const stringifiedBookData = JSON.stringify(bookData || '');
+              let btoaBookData = '';
               try {
-                const btoaBookData = btoa(stringifiedBookData || '');
+                btoaBookData = btoa(stringifiedBookData || '');
               }
               catch (e) {
                 console.log(e, stringifiedBookData);
