@@ -1,0 +1,33 @@
+{
+  "name": "trello-power-up-book-detail",
+  "version": "0.0.1",
+  "description": "A Trello Power-Up for searching and attaching book details to cards",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "validate": "node validate.js",
+    "lint": "eslint js/**/*.js",
+    "test": "npm run validate && npm run lint"
+  },
+  "repository": "https://github.com/trello/glitch-trello-power-up",
+  "dependencies": {
+    "compression": "^1.7.1",
+    "cors": "^2.8.5",
+    "express": "^4.16.2",
+    "confetti-js": "^0.0.15"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0"
+  },
+  "engines": {
+    "node": "12"
+  },
+  "keywords": [
+    "power-ups",
+    "trello",
+    "glitch",
+    "books",
+    "google-books-api"
+  ],
+  "license": "MIT"
+}
