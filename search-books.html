@@ -71,6 +71,12 @@
             // reset the book data store
             bookDataStore = {};
 
+            // Check if items exist in the response
+            if (!data.items || data.items.length === 0) {
+              $('#results').html('<p style="padding: 10px;">No books found.</p>');
+              return;
+            }
+
             const results = data.items.map(item => {
               const volumeInfo = item.volumeInfo;
               const bookData = {
