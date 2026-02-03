@@ -27,7 +27,7 @@
     "trello",
     "glitch",
     "books",
-    "google-books-api"
+    "open-library-api"
   ],
   "license": "MIT"
 }

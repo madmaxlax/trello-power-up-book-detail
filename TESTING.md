@@ -72,7 +72,7 @@ Runs both validation and linting.
   - [ ] Book cover image with border
   - [ ] Book title
   - [ ] Author name
-  - [ ] Link to Google Books (opens in new tab)
+  - [ ] Link to Open Library (opens in new tab)
   - [ ] Book description
 - [ ] "Remove book" button clears book data
 - [ ] "Refresh" button reloads book data
@@ -114,13 +114,6 @@ Test in browsers supported by Trello:
 
 ## Security Validation
 
-### API Key Security
-
-1. Check Google Cloud Console:
-   - [ ] API key has HTTP referrer restrictions
-   - [ ] Allowed referrers: `trello.com/*`, `*.trello.com/*`
-   - [ ] API key is restricted to Google Books API only
-
 ### XSS Prevention
 
 - [ ] Book titles with HTML entities display correctly
@@ -140,7 +133,7 @@ Use the [Trello Developer Power-Up](https://github.com/rwjdk/trello-developer-po
 **Solution**: Check console for CORS errors, verify URL in Trello admin
 
 ### Issue: Search not working
-**Solution**: Check API key, verify network requests in DevTools
+**Solution**: Verify Open Library API is accessible, check network requests in DevTools
 
 ### Issue: Book data not persisting
 **Solution**: Check `t.set()` calls return promises, verify data size < 4096 chars
