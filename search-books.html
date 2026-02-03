@@ -68,7 +68,7 @@
       t.card('name').get('name').then(function (fetchedCardName) {
         $('#search-input').val(fetchedCardName).trigger('input');
       });
-      /* 
+      /*
         This script listens for input events on the element with the ID 'search-input'.
         When the input value changes, it checks if the length of the input value (query) is greater than 2 characters.
         If the query length is greater than 2, it makes an AJAX GET request to the Open Library API to search for books matching the query.
@@ -82,42 +82,52 @@
           // Show loading state
           $('#results').html('<p class="message-text">Searching for books...</p>');
 
-          $.getJSON(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&key=AIzaSyBnkwx6tm6DCQxC2gSkvI62J0F7Mq0FGzM`)
+          $.getJSON(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=20`)
             .done(function (data) {
               // reset the book data store
               bookDataStore = {};
 
-              // Check if items exist in the response
-              if (!data.items || data.items.length === 0) {
+              // Check if docs exist in the response
+              if (!data.docs || data.docs.length === 0) {
                 $('#results').html('<p class="message-text">No books found.</p>');
                 return;
               }
 
-              const results = data.items.map(item => {
-                const volumeInfo = item.volumeInfo;
-                const bookData = {
-                  id: item.id,
-                  title: volumeInfo.title,
-                  author: volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Unknown',
-                  cover: volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : '',
-                  summary: volumeInfo.description || 'No description available.',
-                  isbn: volumeInfo.industryIdentifiers ?
-                    volumeInfo.industryIdentifiers.find(id => id.type === 'ISBN_13')?.identifier ||
-                    volumeInfo.industryIdentifiers[0]?.identifier :
-                    'No ISBN available',
-                  infoLink: volumeInfo.infoLink
-                };
-                // Store book data with ID as key
-                bookDataStore[item.id] = bookData;
+              const results = data.docs.map(doc => {
+                // Construct cover URL from cover_i if available
+                const coverUrl = doc.cover_i
+                  ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg`
+                  : '';
 
-                return `<button class='book-button' data-book-id="${item.id}">
+                // Get first ISBN_13 or fall back to first ISBN
+                const isbn = doc.isbn && doc.isbn.length > 0
+                  ? (doc.isbn.find(i => i.length === 13) || doc.isbn[0])
+                  : 'No ISBN available';
+
+                // Extract work ID from key (format: /works/OL82563W)
+                const workId = doc.key ? doc.key.split('/').pop() : doc.key;
+
+                const bookData = {
+                  id: workId || doc.key,
+                  title: doc.title || 'Unknown Title',
+                  author: doc.author_name ? doc.author_name.join(', ') : 'Unknown',
+                  cover: coverUrl,
+                  summary: doc.first_sentence ? doc.first_sentence.join(' ') : 'No description available.',
+                  isbn: isbn,
+                  infoLink: `https://openlibrary.org${doc.key}`
+                };
+
+                // Store book data with ID as key
+                bookDataStore[bookData.id] = bookData;
+
+                return `<button class='book-button' data-book-id="${bookData.id}">
                   ${bookData.title} by ${bookData.author}
                 </button>`;
               }).join('');
               $('#results').html(results);
             })
             .fail(function (xhr, status, error) {
-              console.error('Google Books API error:', error);
+              console.error('Open Library API error:', error);
               $('#results').html('<p class="error-text">Error searching for books. Please try again.</p>');
             });
         } else {
@@ -125,16 +135,16 @@
         }
       });
 
-      /* 
-        This script listens for click events on elements with the class 'book-result'.
-        When a 'book-result' element is clicked, it retrieves the 'id' data attribute of the clicked element.
+      /*
+        This script listens for click events on elements with the class 'book-button'.
+        When a 'book-button' element is clicked, it retrieves the 'id' data attribute of the clicked element.
         The 'id' attribute is then stored in the shared state of the Power-Up using the 'set' method.
         Finally, the popup is closed.
       */
       $(document).on('click', '.book-button', function () {
         const bookId = $(this).data('book-id');
         const bookData = bookDataStore[bookId];
-        // remove previous attachments that start with http://books.google.com/books
+        // remove previous attachments that start with https://openlibrary.org
         // ... doesn't seem to have this functionality. would have to use the rest api
         // add new attachments
         t.attach({ url: bookData.infoLink, name: bookData.title + ' -- by: ' + bookData.author });
