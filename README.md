@@ -2,7 +2,7 @@
 
 A Trello Power-Up that lets you search for books and attach detailed information directly to your cards. Perfect for reading lists, research projects, book clubs, and educational planning.
 
-![Book Details Power-Up](https://img.shields.io/badge/Trello-Power--Up-0052CC?style=flat&logo=trello)
+![Book Details Power-Up](https://img.shields.io/badge/Trello-Power--Up-0052CC?style=flat&logo=trello) Build and Deploy status: [![Deploy to GitHub Pages](https://github.com/madmaxlax/trello-power-up-book-detail/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/madmaxlax/trello-power-up-book-detail/actions/workflows/deploy.yml)
 
 ## Features
 
