@@ -56,6 +56,9 @@
   <!-- And because we're ALSO doing Power-Up-related things, we still need the Power-Up client library -->
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
 
+  <!-- Book API Provider Abstraction -->
+  <script src="./js/book-api-provider.js"></script>
+
   <script>
     let bookDataStore = {};
     $(document).ready(function () {
@@ -71,8 +74,8 @@
       /*
         This script listens for input events on the element with the ID 'search-input'.
         When the input value changes, it checks if the length of the input value (query) is greater than 2 characters.
-        If the query length is greater than 2, it makes an AJAX GET request to the Open Library API to search for books matching the query.
-        The response data is processed to extract book titles and author names, which are then formatted as a list of HTML <li> elements.
+        If the query length is greater than 2, it searches for books using the configured API provider.
+        The response data is normalized and displayed as clickable buttons.
         The formatted list is inserted into the element with the ID 'results'.
         If the query length is 2 characters or less, the 'results' element is cleared.
       */
@@ -80,43 +83,21 @@
         const query = $(this).val();
         if (query.length > 2) {
           // Show loading state
-          $('#results').html('<p class="message-text">Searching for books...</p>');
+          $('#results').html(`<p class="message-text">Searching for books (${BookAPIProvider.getProvider()})...</p>`);
 
-          $.getJSON(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=20`)
-            .done(function (data) {
+          // Use the book API provider abstraction
+          BookAPIProvider.search(query)
+            .then(function (books) {
               // reset the book data store
               bookDataStore = {};
 
-              // Check if docs exist in the response
-              if (!data.docs || data.docs.length === 0) {
+              // Check if any books were found
+              if (!books || books.length === 0) {
                 $('#results').html('<p class="message-text">No books found.</p>');
                 return;
               }
 
-              const results = data.docs.map(doc => {
-                // Construct cover URL from cover_i if available
-                const coverUrl = doc.cover_i
-                  ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg`
-                  : '';
-
-                // Get first ISBN_13 or fall back to first ISBN
-                const isbn = doc.isbn && doc.isbn.length > 0
-                  ? (doc.isbn.find(i => i.length === 13) || doc.isbn[0])
-                  : 'No ISBN available';
-
-                // Extract work ID from key (format: /works/OL82563W)
-                const workId = doc.key ? doc.key.split('/').pop() : doc.key;
-
-                const bookData = {
-                  id: workId || doc.key,
-                  title: doc.title || 'Unknown Title',
-                  author: doc.author_name ? doc.author_name.join(', ') : 'Unknown',
-                  cover: coverUrl,
-                  summary: doc.first_sentence ? doc.first_sentence.join(' ') : 'No description available.',
-                  isbn: isbn,
-                  infoLink: `https://openlibrary.org${doc.key}`
-                };
-
+              const results = books.map(bookData => {
                 // Store book data with ID as key
                 bookDataStore[bookData.id] = bookData;
 
@@ -126,8 +107,8 @@
               }).join('');
               $('#results').html(results);
             })
-            .fail(function (xhr, status, error) {
-              console.error('Open Library API error:', error);
+            .catch(function (error) {
+              console.error('Book API error:', error);
               $('#results').html('<p class="error-text">Error searching for books. Please try again.</p>');
             });
         } else {
