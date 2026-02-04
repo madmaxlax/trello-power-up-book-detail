@@ -57,15 +57,15 @@
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
 
   <!-- Book API Provider Abstraction -->
-  <script src="./js/book-api-provider.js"></script>
+  <script type="module">
+    import { BookAPIProvider } from './js/book-api-provider.js';
 
-  <script>
     let bookDataStore = {};
     $(document).ready(function () {
 
       // Initialize the Power-Up client library and include your app name and API key
       var t = window.TrelloPowerUp.iframe({
-        appKey: '61b0986b776e15ca2491117b098a531c',
+        appKey: import.meta.env.VITE_TRELLO_APP_KEY,
         appName: 'Book details'
       });
       t.card('name').get('name').then(function (fetchedCardName) {

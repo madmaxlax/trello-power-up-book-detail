@@ -151,7 +151,7 @@ TrelloPowerUp.initialize({
     })
   },
 }, {
-  appKey: '61b0986b776e15ca2491117b098a531c',
+  appKey: import.meta.env.VITE_TRELLO_APP_KEY,
   appName: 'Book detail'
 });
 

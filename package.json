@@ -4,6 +4,9 @@
   "description": "A Trello Power-Up for searching and attaching book details to cards",
   "main": "server.js",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "start": "node server.js",
     "validate": "node validate.js",
     "lint": "eslint js/**/*.js",
@@ -12,15 +15,16 @@
   "repository": "https://github.com/trello/glitch-trello-power-up",
   "dependencies": {
     "compression": "^1.7.1",
+    "confetti-js": "^0.0.15",
     "cors": "^2.8.5",
-    "express": "^4.16.2",
-    "confetti-js": "^0.0.15"
+    "express": "^4.16.2"
   },
   "devDependencies": {
-    "eslint": "^8.57.0"
+    "eslint": "^8.57.0",
+    "vite": "^7.3.1"
   },
   "engines": {
-    "node": "12"
+    "node": ">=20.0.0"
   },
   "keywords": [
     "power-ups",

@@ -5,12 +5,12 @@
  * Makes it easy to switch between providers or try multiple sources.
  */
 
-const BookAPIProvider = {
+export const BookAPIProvider = {
   // Current active provider
   activeProvider: 'googleBooks', // Options: 'googleBooks', 'openLibrary'
 
   // API Key for Google Books
-  googleBooksApiKey: 'AIzaSyBnkwx6tm6DCQxC2gSkvI62J0F7Mq0FGzM',
+  googleBooksApiKey: import.meta.env.VITE_GOOGLE_BOOKS_API_KEY,
 
   /**
    * Search for books using the active provider
@@ -124,8 +124,3 @@ const BookAPIProvider = {
     return this.activeProvider;
   }
 };
-
-// Export for use in other files
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = BookAPIProvider;
-}

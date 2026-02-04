@@ -4,6 +4,10 @@
   <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css">
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
+  <script type="module">
+    // Import env variables
+    const TRELLO_APP_KEY = import.meta.env.VITE_TRELLO_APP_KEY;
+  </script>
 
 </head>
 
@@ -41,12 +45,14 @@
   <div id="content">
     <p>No book selected.</p>
   </div>
-  <script>
+  <script type="module">
+    const TRELLO_APP_KEY = import.meta.env.VITE_TRELLO_APP_KEY;
+
     $(document).ready(function () {
 
       // Initialize the Power-Up client library and include your app name and API key
       var t = window.TrelloPowerUp.iframe({
-        appKey: '61b0986b776e15ca2491117b098a531c',
+        appKey: TRELLO_APP_KEY,
         appName: 'Book details'
       });
 
