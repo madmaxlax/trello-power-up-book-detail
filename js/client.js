@@ -76,7 +76,8 @@ t.getAll();
 
 */
 
-var GRAY_ICON = 'https://cdn.glitch.global/2757198c-0a15-451b-9f67-1ae65b9ba93b/book-open-thin-svgrepo-com.svg?v=1738893407137';
+var GRAY_ICON = './book.png';
+var SEARCH_ICON = './searchwithdoc.svg';
 
 // Helper function to safely parse book data
 var parseBookData = function(data) {
@@ -140,7 +141,7 @@ TrelloPowerUp.initialize({
 
       return [
         {
-          icon: GRAY_ICON,
+          icon: SEARCH_ICON,
           text: bookData ? 'Change Book' : 'Search for Book',
           callback: (t) => t.popup({
             title: 'Search for Book',

@@ -1,0 +1,21 @@
+{
+  "name": "Book Details",
+  "details": "Search for books and attach detailed information to your Trello cards",
+  "icon": {
+    "url": "./book_icon.png"
+  },
+  "author": "Max Struever",
+  "capabilities": [
+    "card-badges",
+    "card-buttons",
+    "card-back-section",
+    "card-detail-badges"
+  ],
+  "connectorUrl": "./index.html",
+  "tags": [
+    "books",
+    "research",
+    "reading",
+    "literature"
+  ]
+}
