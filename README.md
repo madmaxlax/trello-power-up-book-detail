@@ -7,17 +7,20 @@ A Trello Power-Up that lets you search for books and attach detailed information
 ## Features
 
 ### 🔍 Quick Book Search
+
 - Search Google Books directly from any Trello card
 - Find books by title, author, or ISBN
 - Get instant results with book covers
 
 ### 📖 Rich Book Information
+
 - Automatically attach book covers to cards
 - Display author, title, and ISBN
 - Link to full book details on Google Books
 - Show book summaries on the card back
 
 ### 🎨 Beautiful Integration
+
 - Card badges show which books are attached
 - Expandable card section for full details
 - Seamless Trello design integration
@@ -48,6 +51,7 @@ A Trello Power-Up that lets you search for books and attach detailed information
 ### For Board Members
 
 Once added to your workspace, enable it on any board:
+
 1. Open a board
 2. Click "Power-Ups" → "Book Details"
 3. Click "Enable"
@@ -69,10 +73,12 @@ Once added to your workspace, enable it on any board:
 ### Viewing Book Details
 
 **On the card front:**
+
 - Badge shows book title and author
 - Book cover appears as card cover image
 
 **On the card back:**
+
 - Expandable "Book Details" section
 - Full book information:
   - Cover image
@@ -90,18 +96,23 @@ Once added to your workspace, enable it on any board:
 ## Use Cases
 
 ### 📚 Reading Lists
+
 Track your to-read list with book covers and descriptions right on your cards
 
 ### 🎓 Research & Study
+
 Organize research materials and textbooks for projects or courses
 
 ### 👥 Book Clubs
+
 Manage book selections with full details and easy access to more info
 
 ### 🏢 Team Libraries
+
 Catalog team resources and recommended reading
 
 ### ✍️ Writing Projects
+
 Track reference materials and research books for your writing
 
 ## Support
@@ -151,6 +162,7 @@ npm run build        # Build for production
 Created by Max Struever
 
 Built with:
+
 - [Trello Power-Up API](https://developer.atlassian.com/cloud/trello/power-ups/)
 - [Google Books API](https://developers.google.com/books)
 - [Vite](https://vitejs.dev/)
