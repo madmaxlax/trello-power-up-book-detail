@@ -31,12 +31,12 @@ const BookAPIProvider = {
   providers: {
     /**
      * Google Books API Provider
-     * Note: Uses intitle: operator because generic searches now return 0 results
+     * Uses generic search with excellent fuzzy matching
      */
     googleBooks: {
       async search(query) {
-        // Use intitle: operator for better results (generic searches broken as of 2025)
-        const searchQuery = `intitle:${encodeURIComponent(query)}`;
+        // Generic search works great - supports title, author, mixed queries, and even typos!
+        const searchQuery = encodeURIComponent(query);
         const url = `https://www.googleapis.com/books/v1/volumes?q=${searchQuery}&key=${this.googleBooksApiKey}&maxResults=20`;
 
         const response = await fetch(url);
